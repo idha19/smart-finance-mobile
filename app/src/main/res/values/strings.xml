@@ -1,8 +1,24 @@
 <resources>
     <string name="app_name">Dompet ku</string>
-    <string name="nama">Mawarrr</string>
+    <string name="nama">Faidha Nur Risky</string>
     <string name="masuk">Pemasukkan</string>
     <string name="keluar">Pengeluaran</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="kategori_array">
+        <item>Makanan</item>
+        <item>Transportasi</item>
+        <item>Belanja</item>
+        <item>Hiburan</item>
+        <item>Tagihan</item>
+        <item>Gaji</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <string-array name="filter_options">
+        <item>Per Minggu</item>
+        <item>Per Bulan</item>
+        <item>Per Tahun</item>
+    </string-array>
 </resources>

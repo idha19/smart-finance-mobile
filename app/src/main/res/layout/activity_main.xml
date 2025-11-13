@@ -50,6 +50,32 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/btn_statistik"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/imageViewStatistik"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_chart"
+                app:tint="@color/ungu" />
+
+            <TextView
+                android:id="@+id/textViewStatistik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Statistik"
+                android:textColor="@color/ungu"
+                android:textSize="12sp" />
+        </LinearLayout>
+
         <!-- Tombol Tambah -->
         <LinearLayout
             android:id="@+id/btn_add"

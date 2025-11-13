@@ -39,9 +39,11 @@ class Transaksi : Fragment() {
             val jenis = bundle.getString("jenis", "")
             val nominal = bundle.getInt("nominal", 0)
             val tanggal = bundle.getString("tanggal", "")
+            val catatan = bundle.getString("catatan", "")
+            val kategori = bundle.getString("kategori", "")
 
             if (jenis.isNotEmpty()) {
-                val newTransaction = Transaction(id, jenis, nominal, tanggal)
+                val newTransaction = Transaction(id, jenis, nominal, tanggal, catatan, kategori)
                 adapter.addTransaction(newTransaction)
                 recyclerView.scrollToPosition(0)
             }

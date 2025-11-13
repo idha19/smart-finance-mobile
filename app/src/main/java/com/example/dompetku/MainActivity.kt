@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.dompetku.Fragment.Dashboard
 import com.example.dompetku.Fragment.New
+import com.example.dompetku.Fragment.Statistik
 import com.example.dompetku.Fragment.Transaksi
 import com.example.dompetku.Model.Transaction
 
@@ -17,14 +18,17 @@ class MainActivity : AppCompatActivity(), New.NewFragmentListener {
     private lateinit var btnHome: LinearLayout
     private lateinit var btnAdd: LinearLayout
     private lateinit var btnCatatan: LinearLayout
+    private lateinit var btnStatistik: LinearLayout
 
     private lateinit var imgHome: ImageView
     private lateinit var imgAdd: ImageView
     private lateinit var imgCatatan: ImageView
+    private lateinit var imgStatistik: ImageView
 
     private lateinit var txtHome: TextView
     private lateinit var txtAdd: TextView
     private lateinit var txtCatatan: TextView
+    private lateinit var txtStatistik: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,15 +38,18 @@ class MainActivity : AppCompatActivity(), New.NewFragmentListener {
         btnHome = findViewById(R.id.btn_home)
         btnAdd = findViewById(R.id.btn_add)
         btnCatatan = findViewById(R.id.btn_catatan)
+        btnStatistik = findViewById(R.id.btn_statistik)
 
         // Inisialisasi icon dan text
         imgHome = findViewById(R.id.imageViewHome)
         imgAdd = findViewById(R.id.imageViewAdd)
         imgCatatan = findViewById(R.id.imageViewCatatan)
+        imgStatistik = findViewById(R.id.imageViewStatistik)
 
         txtHome = findViewById(R.id.textViewHome)
         txtAdd = findViewById(R.id.textViewAdd)
         txtCatatan = findViewById(R.id.textViewCatatan)
+        txtStatistik = findViewById(R.id.textViewStatistik)
 
         // Load default fragment (Dashboard)
         replaceFragment(Dashboard())
@@ -52,6 +59,11 @@ class MainActivity : AppCompatActivity(), New.NewFragmentListener {
         btnHome.setOnClickListener {
             replaceFragment(Dashboard())
             setActiveButton(btnHome)
+        }
+
+        btnStatistik.setOnClickListener {
+            replaceFragment(Statistik())
+            setActiveButton(btnStatistik)
         }
 
         btnAdd.setOnClickListener {
@@ -74,15 +86,17 @@ class MainActivity : AppCompatActivity(), New.NewFragmentListener {
 
     // Fungsi untuk highlight tombol aktif
     private fun setActiveButton(activeButton: LinearLayout) {
-        val buttons = listOf(btnHome, btnAdd, btnCatatan)
+        val buttons = listOf(btnHome, btnStatistik, btnAdd, btnCatatan)
         buttons.forEach { btn ->
             val img = when (btn) {
                 btnHome -> imgHome
+                btnStatistik -> imgStatistik
                 btnAdd -> imgAdd
                 else -> imgCatatan
             }
             val txt = when (btn) {
                 btnHome -> txtHome
+                btnStatistik -> txtStatistik
                 btnAdd -> txtAdd
                 else -> txtCatatan
             }

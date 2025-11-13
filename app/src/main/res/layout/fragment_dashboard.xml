@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@color/babyBlue"
     tools:context=".Fragment.Dashboard">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:background="@color/babyBlue">
 
     <!-- Bagian Profil -->
     <LinearLayout
@@ -19,9 +25,9 @@
 
         <ImageView
             android:id="@+id/profileIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_profile"
+            android:layout_width="89dp"
+            android:layout_height="89dp"
+            android:src="@drawable/logo"
             android:padding="10dp"
             android:layout_marginEnd="12dp"
             android:contentDescription="Profile Icon" />
@@ -48,15 +54,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Kotak Total Saldo -->
+        <!-- Kotak Total Saldo -->
     <androidx.cardview.widget.CardView
         android:id="@+id/roundedBox"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="130dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardUseCompatPadding="true"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false"
         app:cardBackgroundColor="@color/pink">
 
         <LinearLayout
@@ -85,14 +93,359 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Teks Kategori -->
     <TextView
-        android:id="@+id/kategori"
+        android:id="@+id/kategori1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/roundedBox"
+        android:layout_below="@+id/roundedBox"
         android:layout_marginTop="24dp"
         android:text="Kategori"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingLeft="20dp"
+        android:textColor="@color/black"/>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollKategori"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/kategori1"
+        android:layout_marginTop="12dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/kategoriContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardGaji"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmGaji"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_gaji"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textGaji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gaji"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressGaji"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardMakan"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmMakan"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_makanan"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textMakan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Makanan"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressMakan"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardBelanja"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmBelanja"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_belanja"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textBelanja"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Belanja"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBelanja"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardTrans"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmTrans"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_transportasi"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textTrans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Transportasi"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressTrans"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardHiburan"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmHiburan"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_hiburan"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textHiburan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hiburan"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressHiburan"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardTagihan"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmTagihan"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_tagihan"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textTagihan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tagihan"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressTagihan"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardLainnya"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/hmLainnya"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_lainnya"
+                        android:contentDescription="Makanan" />
+
+                    <TextView
+                        android:id="@+id/textLainnya"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="lainnya"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progressLainnya"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="6dp"
+                        android:progress="60"
+                        android:max="100"
+                        android:progressTint="@color/pink"
+                        android:backgroundTint="@color/gray" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+    <!-- Teks jenis transksi -->
+    <TextView
+        android:id="@+id/jenisTransaksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scrollKategori"
+        android:layout_marginTop="20dp"
+        android:text="Jenis Transaksi"
         android:textSize="18sp"
         android:textStyle="bold"
         android:paddingLeft="20dp" />
@@ -102,9 +455,9 @@
         android:id="@+id/boxRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/kategori"
-        android:layout_marginTop="16dp"
-        android:padding="18dp"
+        android:layout_below="@id/jenisTransaksi"
+        android:layout_marginTop="3dp"
+        android:padding="10dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -116,7 +469,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
+            app:cardElevation="0dp"
             app:cardBackgroundColor="@color/hijau">
 
             <LinearLayout
@@ -151,7 +504,7 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
+            app:cardElevation="0dp"
             app:cardBackgroundColor="@color/orange">
 
             <LinearLayout
@@ -178,5 +531,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

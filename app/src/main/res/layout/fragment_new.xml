@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/orange"
     tools:context=".Fragment.New">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
     <!-- Box 1: Input nominal angka dengan Rp -->
     <androidx.cardview.widget.CardView
@@ -58,7 +63,9 @@
         app:cardCornerRadius="10dp"
         android:layout_marginBottom="8dp"
         app:cardUseCompatPadding="true"
-        android:backgroundTint="@color/white">
+        android:backgroundTint="@color/white"
+        android:clickable="false"
+        android:focusable="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -83,7 +90,9 @@
         app:cardCornerRadius="10dp"
         android:layout_marginBottom="8dp"
         app:cardUseCompatPadding="true"
-        android:backgroundTint="@color/white" >
+        android:backgroundTint="@color/white"
+        android:clickable="false"
+        android:focusable="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -99,6 +108,74 @@
                 android:buttonTint="@color/pink"
                 android:text="@string/keluar"/>
         </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Box 3: Pilih Kategori -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardKategori"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginBottom="8dp"
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/labelKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kategori:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp" />
+
+            <Spinner
+                android:id="@+id/spinnerKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/kategori_array"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardCatatan"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginBottom="8dp"
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="top"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Tulis catatan keuangan di sini..."
+                android:textSize="16sp"
+                android:padding="8dp"
+                android:gravity="top|start"
+                android:background="@android:color/transparent"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                android:maxLines="6" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -146,4 +223,5 @@
         android:textSize="18sp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"/>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

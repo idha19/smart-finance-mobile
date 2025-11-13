@@ -23,6 +23,8 @@ class New : Fragment() {
     private lateinit var inputNominal: EditText
     private lateinit var checkMasuk: CheckBox
     private lateinit var checkKeluar: CheckBox
+    private lateinit var spinnerKategori: Spinner
+    private lateinit var inputCatatan: EditText
     private lateinit var textTanggal: TextView
     private lateinit var btnSimpan: Button
     private lateinit var dbHelper: DatabaseHelper
@@ -37,6 +39,8 @@ class New : Fragment() {
         inputNominal = view.findViewById(R.id.inputNominal)
         checkMasuk = view.findViewById(R.id.CheckBox1)
         checkKeluar = view.findViewById(R.id.CheckBox2)
+        spinnerKategori = view.findViewById(R.id.spinnerKategori)
+        inputCatatan = view.findViewById(R.id.task)
         textTanggal = view.findViewById(R.id.textTanggal)
         btnSimpan = view.findViewById(R.id.btnSimpan)
 
@@ -73,6 +77,9 @@ class New : Fragment() {
         // tombol simpan
         btnSimpan.setOnClickListener {
             val nominalStr = inputNominal.text.toString().trim()
+            val catatan = inputCatatan.text.toString().trim()
+            val kategori = spinnerKategori.selectedItem.toString()
+
             if (nominalStr.isEmpty()) {
                 Toast.makeText(requireContext(), "Masukkan nominal!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -95,7 +102,9 @@ class New : Fragment() {
                 id = 0, // id otomatis di SQLite
                 jenis = jenis,
                 nominal = nominal,
-                tanggal = tanggal
+                tanggal = tanggal,
+                catatan = catatan,
+                kategori = kategori
             )
 
             val id = dbHelper.insertTransaksi(transaksi)
@@ -105,8 +114,10 @@ class New : Fragment() {
                 listener?.onTransactionAdded(transaksi)
                 // reset form
                 inputNominal.text.clear()
+                inputCatatan.text.clear()
                 checkMasuk.isChecked = false
                 checkKeluar.isChecked = false
+                spinnerKategori.setSelection(0)
                 textTanggal.text = dateFormat.format(Calendar.getInstance().time)
             } else {
                 Toast.makeText(requireContext(), "Gagal menyimpan transaksi", Toast.LENGTH_SHORT).show()

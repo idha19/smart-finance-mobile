@@ -47,6 +47,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

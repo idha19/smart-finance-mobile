@@ -2,7 +2,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/babyBlue">
 
     <TextView
         android:id="@+id/JudulTransaksi"
@@ -12,7 +13,7 @@
         android:textStyle="bold"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTransaksi"
