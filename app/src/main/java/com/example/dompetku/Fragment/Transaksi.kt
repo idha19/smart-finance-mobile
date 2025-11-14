@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dompetku.Adapter.TransactionAdapter
 import com.example.dompetku.Model.Transaction
 import com.example.dompetku.R
+import com.example.dompetku.TransactionSwipeHelper
 import com.example.dompetku.Utils.DatabaseHelper
 
 class Transaksi : Fragment() {
@@ -24,16 +26,23 @@ class Transaksi : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_transaksi, container, false)
 
-        recyclerView = view.findViewById(R.id.rvTransaksi) // pastikan di fragment_transaksi.xml ada RecyclerView
+        recyclerView = view.findViewById(R.id.rvTransaksi)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         dbHelper = DatabaseHelper(requireContext())
+
+        // Ambil data transaksi dari database
         val transaksiList: MutableList<Transaction> = dbHelper.getAllTransaksi().toMutableList()
 
-        adapter = TransactionAdapter(transaksiList)
+        // Inisialisasi adapter
+        adapter = TransactionAdapter(requireContext(), transaksiList)
         recyclerView.adapter = adapter
 
-        // Jika ada transaksi baru lewat bundle
+        // Tambahkan fitur swipe kiri-kanan
+        val itemTouchHelper = ItemTouchHelper(TransactionSwipeHelper(adapter))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        // Jika ada transaksi baru dari bundle (misal setelah tambah transaksi)
         arguments?.let { bundle ->
             val id = bundle.getInt("id", 0)
             val jenis = bundle.getString("jenis", "")

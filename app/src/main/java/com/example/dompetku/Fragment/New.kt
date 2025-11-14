@@ -74,6 +74,33 @@ class New : Fragment() {
             if (isChecked) checkMasuk.isChecked = false
         }
 
+        var current = ""
+        inputNominal.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: android.text.Editable?) {
+                if (s.toString() != current) {
+                    inputNominal.removeTextChangedListener(this)
+
+                    val clean = s.toString().replace(".", "")
+
+                    if (clean.isNotEmpty()) {
+                        try {
+                            val value = clean.toLong()
+                            val formatted = String.format("%,d", value).replace(",", ".")
+                            current = formatted
+
+                            inputNominal.setText(formatted)
+                            inputNominal.setSelection(formatted.length)
+                        } catch (_: Exception) { }
+                    }
+
+                    inputNominal.addTextChangedListener(this)
+                }
+            }
+        })
+
         // tombol simpan
         btnSimpan.setOnClickListener {
             val nominalStr = inputNominal.text.toString().trim()
@@ -94,7 +121,16 @@ class New : Fragment() {
                 }
             }
 
-            val nominal = nominalStr.toInt()
+            if (jenis == "Pemasukkan" && kategori !in listOf("Gaji", "Lainnya")) {
+                Toast.makeText(requireContext(), "Kategori tidak valid untuk pemasukkan!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (jenis == "Pengeluaran" && kategori == "Gaji") {
+                Toast.makeText(requireContext(), "Kategori tidak valid untuk pengeluaran!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val nominal = nominalStr.replace(".", "").toInt()
             val tanggal = textTanggal.text.toString()
 
             // buat objek Transaksi

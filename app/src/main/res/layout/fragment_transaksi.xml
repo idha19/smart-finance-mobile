@@ -9,9 +9,10 @@
         android:id="@+id/JudulTransaksi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TRANSAKSI"
+        android:text="CATATAN"
         android:textStyle="bold"
         android:textSize="24sp"
+        android:textColor="@color/text"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp" />
 

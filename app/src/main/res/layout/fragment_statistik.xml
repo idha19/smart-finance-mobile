@@ -19,64 +19,83 @@
             android:text="Statistik Pengeluaran"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="#333333"
+            android:textColor="@color/text"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Input Tanggal -->
+        <EditText
+            android:id="@+id/etTanggalStatistik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Pilih tanggal"
+            android:focusable="false"
+            android:clickable="true"
+            android:padding="12dp"
+            android:textColor="@color/text"
             android:layout_marginBottom="16dp" />
 
         <!-- Tombol Filter Periode -->
-        <LinearLayout
-            android:id="@+id/layoutFilter"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/scrollFilter"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+            android:scrollbars="none"
             android:layout_marginBottom="20dp">
 
-            <Button
-                android:id="@+id/btnHari"
+            <LinearLayout
+                android:id="@+id/layoutFilter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hari"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#9C27B0"
-                android:layout_marginEnd="8dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp"
-                android:layout_gravity="center" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
 
-            <Button
-                android:id="@+id/btnMinggu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Minggu"
-                android:textColor="#9C27B0"
-                android:backgroundTint="#E1BEE7"
-                android:layout_marginEnd="8dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp" />
+                <Button
+                    android:id="@+id/btnHari"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hari"
+                    android:textColor="#9C27B0"
+                    android:backgroundTint="#9C27B0"
+                    android:layout_marginEnd="8dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp" />
 
-            <Button
-                android:id="@+id/btnBulan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bulan"
-                android:textColor="#9C27B0"
-                android:backgroundTint="#E1BEE7"
-                android:layout_marginEnd="8dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp" />
+                <Button
+                    android:id="@+id/btnMinggu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minggu"
+                    android:textColor="#9C27B0"
+                    android:backgroundTint="#E1BEE7"
+                    android:layout_marginEnd="8dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp" />
 
-            <Button
-                android:id="@+id/btnTahun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tahun"
-                android:textColor="#9C27B0"
-                android:backgroundTint="#E1BEE7"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="6dp" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btnBulan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bulan"
+                    android:textColor="#9C27B0"
+                    android:backgroundTint="#E1BEE7"
+                    android:layout_marginEnd="8dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp" />
 
-        <!-- Pie Chart -->
+                <Button
+                    android:id="@+id/btnTahun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tahun"
+                    android:textColor="#9C27B0"
+                    android:backgroundTint="#E1BEE7"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Judul PieChart -->
         <TextView
             android:id="@+id/tvJudulPie"
             android:layout_width="wrap_content"
@@ -84,32 +103,15 @@
             android:text="Persentase Pengeluaran per Kategori"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:textColor="#333333"
+            android:textColor="@color/text"
             android:layout_marginBottom="8dp" />
 
+        <!-- PieChart -->
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartKategori"
             android:layout_width="match_parent"
             android:layout_height="330dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginHorizontal="0dp" />
-
-        <!-- Bar Chart -->
-        <TextView
-            android:id="@+id/tvJudulBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Perbandingan Nominal per Kategori"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#333333"
-            android:layout_marginBottom="8dp" />
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChartKategori"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginHorizontal="8dp" />
+            android:layout_marginBottom="24dp" />
 
     </LinearLayout>
 </ScrollView>

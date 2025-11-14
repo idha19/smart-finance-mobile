@@ -81,4 +81,31 @@ class DatabaseHelper(context: Context) :
         db.close()
         return list
     }
+
+    fun updateTransaksi(transaksi: Transaction): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(JENIS, transaksi.jenis)
+            put(NOMINAL, transaksi.nominal)
+            put(TANGGAL, transaksi.tanggal)
+            put(CATATAN, transaksi.catatan)
+            put(KATEGORI, transaksi.kategori)
+        }
+
+        val result = db.update(
+            TABLE_TRANSAKSI,
+            values,
+            "$ID = ?",
+            arrayOf(transaksi.id.toString())
+        )
+        db.close()
+        return result
+    }
+
+    fun deleteTransaksi(id: Int) : Int {
+        val db = writableDatabase
+        val result = db.delete(TABLE_TRANSAKSI, "$ID = ?", arrayOf(id.toString()))
+        db.close()
+        return  result
+    }
 }
