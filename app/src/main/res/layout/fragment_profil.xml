@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BgUt">
+
+    <!-- HEADER (TIDAK DIUBAH) -->
+    <!-- HEADER -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:background="@color/white"
+        android:padding="16dp">
+
+        <!-- BACK BUTTON -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/arrow" />
+
+        <TextView
+            android:id="@+id/titleProfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Profil"
+            android:textSize="20sp"
+            android:fontFamily="@font/manrope_bold"
+            android:textColor="?attr/colorOnPrimary"
+            android:textStyle="bold"/>
+
+        <!-- FOTO PROFIL DI TENGAH -->
+        <RelativeLayout
+            android:id="@+id/profileContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <!-- FOTO PROFIL (CardView) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardProfile"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="62dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/imgProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ICON EDIT -->
+            <ImageView
+                android:id="@+id/btnEditPhoto"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/edit"
+                android:padding="6dp"
+                android:background="@drawable/circle_edit"
+                android:layout_alignBottom="@id/cardProfile"
+                android:layout_alignEnd="@id/cardProfile"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Pengguna"
+            android:textSize="24sp"
+            android:fontFamily="@font/manrope_bold"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_below="@id/profileContainer"
+            android:layout_marginTop="12dp"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/abu22"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- SECTION TITLE -->
+            <TextView
+                android:id="@+id/pengaturan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengaturan"
+                android:textSize="20sp"
+                android:layout_marginStart="14dp"
+                android:fontFamily="@font/manrope_bold"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginBottom="10dp" />
+
+
+            <!-- ITEM 1: Ubah Nama Pengguna -->
+            <LinearLayout
+                android:id="@+id/ubahNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/nama"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/comment"
+                    android:background="@drawable/input_box"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/textNama"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Ubah Nama Pengguna"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
+
+
+            <!-- ITEM 2: Mode Gelap + Switch -->
+            <LinearLayout
+                android:id="@+id/mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/moon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/moon"
+                    android:background="@drawable/input_box"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/darkMood"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:text="Mode Gelap"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:textColor="?attr/colorOnPrimary" />
+
+                <Switch
+                    android:id="@+id/switchDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <!-- ITEM 3: Hapus Semua Data -->
+            <LinearLayout
+                android:id="@+id/hapus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:id="@+id/delete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/hapus"
+                    android:background="@drawable/input_box"
+                    android:padding="8dp" />
+
+                <TextView
+                    android:id="@+id/delteAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Hapus Semua Data"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,134 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <!-- Area konten untuk fragment -->
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white" />
-
-    <!-- Bottom menu -->
     <LinearLayout
-        android:id="@+id/bottom_menu"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:background="@color/white"
-        android:elevation="8dp"
-        android:padding="8dp">
+        android:layout_height="match_parent">
 
-        <!-- Tombol Home -->
-        <LinearLayout
-            android:id="@+id/btn_home"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <!-- FRAGMENT CONTAINER -->
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
+            android:paddingBottom="0dp"
+            android:clipToPadding="false"
+            android:fitsSystemWindows="true"/>
 
-            <ImageView
-                android:id="@+id/imageViewHome"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_home"
-                app:tint="@color/ungu" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/abu22"/>
 
-            <TextView
-                android:id="@+id/textViewHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:textColor="@color/ungu"
-                android:textSize="12sp" />
-        </LinearLayout>
-
+        <!-- BOTTOM MENU -->
         <LinearLayout
-            android:id="@+id/btn_statistik"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
+            android:id="@+id/bottom_menu"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:orientation="horizontal"
+            android:background="?attr/android:statusBarColor"
+            android:elevation="10dp"
+            android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/imageViewStatistik"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_chart"
-                app:tint="@color/ungu" />
+            <LinearLayout
+                android:id="@+id/btn_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewStatistik"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Statistik"
-                android:textColor="@color/ungu"
-                android:textSize="12sp" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageViewHome"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/home" />
 
-        <!-- Tombol Tambah -->
-        <LinearLayout
-            android:id="@+id/btn_add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
+                <TextView
+                    android:id="@+id/textViewHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageViewAdd"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_add"
-                app:tint="@color/ungu" />
+            <LinearLayout
+                android:id="@+id/btn_statistik"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tambah"
-                android:textColor="@color/ungu"
-                android:textSize="12sp" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageViewStatistik"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/charts" />
 
-        <!-- Tombol Catatan -->
-        <LinearLayout
-            android:id="@+id/btn_catatan"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
+                <TextView
+                    android:id="@+id/textViewStatistik"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Statistik"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageViewCatatan"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_notes"
-                app:tint="@color/ungu" />
+            <LinearLayout
+                android:id="@+id/btn_notes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewCatatan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Catatan"
-                android:textColor="@color/ungu"
-                android:textSize="12sp" />
+                <ImageView
+                    android:id="@+id/imageViewNotes"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/laporan" />
+
+                <TextView
+                    android:id="@+id/textViewNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Laporan"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_profil"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageViewProfil"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/user" />
+
+                <TextView
+                    android:id="@+id/textViewProfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profil"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnPrimary" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+
+    <!-- FLOATING BUTTON -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="80dp"
+        android:src="@drawable/ic_add"
+        app:tint="@color/black"
+        app:backgroundTint="@color/utamaUt"
+        app:maxImageSize="36dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+
+</FrameLayout>

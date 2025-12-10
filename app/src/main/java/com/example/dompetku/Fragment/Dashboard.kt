@@ -1,131 +1,195 @@
 package com.example.dompetku.Fragment
 
+import android.app.DatePickerDialog
+import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.dompetku.Adapter.TransactionAdapterDashboard
 import com.example.dompetku.R
 import com.example.dompetku.Utils.DatabaseHelper
-import com.example.dompetku.Model.Transaction
+import com.example.dompetku.Utils.ProfilePref
+import java.util.*
 
 class Dashboard : Fragment() {
+
+    private lateinit var dbHelper: DatabaseHelper
+    private lateinit var profilePref: ProfilePref
+
+    private lateinit var tvProfileName: TextView
+    private lateinit var imgProfile: ImageView
 
     private lateinit var tvTotalSaldo: TextView
     private lateinit var tvPemasukkan: TextView
     private lateinit var tvPengeluaran: TextView
-    private lateinit var dbHelper: DatabaseHelper
 
-    private lateinit var progressMakan: ProgressBar
-    private lateinit var progressBelanja: ProgressBar
-    private lateinit var progressTrans: ProgressBar
-    private lateinit var progressHiburan: ProgressBar
-    private lateinit var progressTagihan: ProgressBar
-    private lateinit var progressGaji: ProgressBar
-    private lateinit var progressLainnya: ProgressBar
+    private lateinit var rvTransaksi: RecyclerView
+    private lateinit var transactionAdapter: TransactionAdapterDashboard
 
-    private lateinit var textMakan: TextView
-    private lateinit var textBelanja: TextView
-    private lateinit var textTrans: TextView
-    private lateinit var textHiburan: TextView
-    private lateinit var textTagihan: TextView
-    private lateinit var textGaji: TextView
-    private lateinit var textLainnya: TextView
+    private lateinit var iconCalendar: ImageView
 
+    private lateinit var notifCard: CardView
+    private lateinit var txtNotif: TextView
+    private lateinit var iconNotif: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+    }
 
-        // 🔹 Inisialisasi TextView utama
-        tvTotalSaldo = view.findViewById(R.id.hargaTotal)
-        tvPemasukkan = view.findViewById(R.id.masuk)
-        tvPengeluaran = view.findViewById(R.id.keluar)
-
-        // 🔹 Text kategori
-        textGaji = view.findViewById(R.id.textGaji)
-        textMakan = view.findViewById(R.id.textMakan)
-        textBelanja = view.findViewById(R.id.textBelanja)
-        textTrans = view.findViewById(R.id.textTrans)
-        textHiburan = view.findViewById(R.id.textHiburan)
-        textTagihan = view.findViewById(R.id.textTagihan)
-        textLainnya = view.findViewById(R.id.textLainnya)
-
-        // 🔹 Progress bar kategori
-        progressGaji = view.findViewById(R.id.progressGaji)
-        progressMakan = view.findViewById(R.id.progressMakan)
-        progressBelanja = view.findViewById(R.id.progressBelanja)
-        progressTrans = view.findViewById(R.id.progressTrans)
-        progressHiburan = view.findViewById(R.id.progressHiburan)
-        progressTagihan = view.findViewById(R.id.progressTagihan)
-        progressLainnya = view.findViewById(R.id.progressLainnya)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         dbHelper = DatabaseHelper(requireContext())
+        profilePref = ProfilePref(requireContext())
 
-        updateDashboard()
+        initView(view)
 
-        return view
+        transactionAdapter = TransactionAdapterDashboard(requireContext(), mutableListOf())
+        rvTransaksi.adapter = transactionAdapter
+        rvTransaksi.layoutManager = LinearLayoutManager(requireContext())
+
+        iconCalendar.setOnClickListener { showDatePicker() }
+
+        refreshUI()
     }
 
-    private fun updateDashboard() {
-        val transaksiList: List<Transaction> = dbHelper.getAllTransaksi()
+    override fun onResume() {
+        super.onResume()
+        refreshUI()
+    }
 
-        var totalMasuk = 0
-        var totalKeluar = 0
+    private fun refreshUI() {
+        refreshProfile()
+        loadRingkasanSaldo()
+        loadLatestTransaksi()
+    }
 
-        var totalGaji = 0
-        var totalMakan = 0
-        var totalBelanja = 0
-        var totalTrans = 0
-        var totalHiburan = 0
-        var totalTagihan = 0
-        var totalLainnya = 0
+    private fun initView(view: View) {
+        tvProfileName = view.findViewById(R.id.profileName)
+        imgProfile = view.findViewById(R.id.imgProfile)
+        tvTotalSaldo = view.findViewById(R.id.nominalSisa)
+        tvPemasukkan = view.findViewById(R.id.nominalPemasukan)
+        tvPengeluaran = view.findViewById(R.id.nominalPengeluaran)
+        rvTransaksi = view.findViewById(R.id.rvTransaksi)
+        iconCalendar = view.findViewById(R.id.iconCalendar)
 
-        for (t in transaksiList) {
-            when (t.jenis) {
-                "Pemasukkan" -> totalMasuk += t.nominal
-                "Pengeluaran" -> {
-                    totalKeluar += t.nominal
-                    when (t.kategori) {
-                        "Makanan" -> totalMakan += t.nominal
-                        "Belanja" -> totalBelanja += t.nominal
-                        "Transportasi" -> totalTrans += t.nominal
-                        "Hiburan" -> totalHiburan += t.nominal
-                        "Tagihan" -> totalTagihan += t.nominal
-                        "Lainnya" -> totalLainnya += t.nominal
-                    }
-                }
-            }
+        notifCard = view.findViewById(R.id.notif)
+        txtNotif = view.findViewById(R.id.txtNotif)
+        iconNotif = view.findViewById(R.id.iconNotif)
+    }
 
-            if (t.kategori == "Gaji" && t.jenis == "Pemasukkan") {
-                totalGaji += t.nominal
-            }
+    private fun refreshProfile() {
+        tvProfileName.text = profilePref.getName()
+        profilePref.getPhoto()?.let { uri ->
+            try { imgProfile.setImageURI(Uri.parse(uri)) }
+            catch (_: Exception) { imgProfile.setImageResource(R.drawable.logo) }
+        }
+    }
+
+    private fun loadRingkasanSaldo() {
+        val allTrans = dbHelper.getAllTransaksi()
+
+        var pemasukan = 0
+        var pengeluaran = 0
+
+        allTrans.forEach {
+            if (it.jenis.equals("Pemasukkan", true)) pemasukan += it.nominal
+            if (it.jenis.equals("Pengeluaran", true)) pengeluaran += it.nominal
         }
 
-        val saldo = totalMasuk - totalKeluar
+        tvTotalSaldo.text = formatRupiah(pemasukan - pengeluaran)
+        tvPemasukkan.text = formatRupiah(pemasukan)
+        tvPengeluaran.text = formatRupiah(pengeluaran)
 
-        // 🔹 Tampilkan ke TextView
-        tvPemasukkan.text = "Rp. ${formatRupiah(totalMasuk)}"
-        tvPengeluaran.text = "Rp. ${formatRupiah(totalKeluar)}"
-        tvTotalSaldo.text = "Rp. ${formatRupiah(saldo)}"
-
-        // 🔹 Hitung persentase aman biar gak crash
-        val totalAll = if (totalKeluar == 0) 1 else totalKeluar
-
-        progressMakan.progress = (totalMakan * 100 / totalAll)
-        progressBelanja.progress = (totalBelanja * 100 / totalAll)
-        progressTrans.progress = (totalTrans * 100 / totalAll)
-        progressHiburan.progress = (totalHiburan * 100 / totalAll)
-        progressTagihan.progress = (totalTagihan * 100 / totalAll)
-        progressLainnya.progress = (totalLainnya * 100 / totalAll)
-        progressGaji.progress = (totalGaji * 100 / (if (totalMasuk == 0) 1 else totalMasuk))
+        updateNotif(pemasukan, pengeluaran)
     }
 
-    private fun formatRupiah(nominal: Int): String {
-        return String.format("%,d", nominal).replace(",", ".")
+    private fun updateNotif(pemasukan: Int, pengeluaran: Int) {
+
+        if (pemasukan == 0 && pengeluaran == 0) {
+            notifCard.visibility = View.GONE
+            return
+        }
+
+        notifCard.visibility = View.VISIBLE
+
+        val background = GradientDrawable()
+        background.cornerRadius = 8.dpToPx().toFloat() // sudut melengkung
+
+        if (pemasukan == pengeluaran) {
+            background.setColor(resources.getColor(R.color.notifKuning))
+            background.setStroke(1.dpToPx(), resources.getColor(R.color.iconKuning))
+
+            notifCard.background = background
+            iconNotif.setColorFilter(resources.getColor(R.color.iconKuning))
+            txtNotif.setTextColor(resources.getColor(R.color.iconKuning))
+            txtNotif.text = "Pemasukan dan pengeluaran bulan ini seimbang."
+            return
+        }
+
+        val besar = maxOf(pemasukan, pengeluaran)
+        val kecil = minOf(pemasukan, pengeluaran)
+        var persen = if (kecil > 0) ((besar - kecil) / kecil.toFloat() * 100).toInt() else 100
+        persen = persen.coerceAtMost(100) // maksimal 100%
+
+        if (pengeluaran > pemasukan) {
+            background.setColor(resources.getColor(R.color.notifMerah))
+            background.setStroke(1.dpToPx(), resources.getColor(R.color.iconMerah))
+
+            notifCard.background = background
+            iconNotif.setColorFilter(resources.getColor(R.color.iconMerah))
+            txtNotif.setTextColor(resources.getColor(R.color.iconMerah))
+            txtNotif.text = "Pengeluaran bulan ini $persen% lebih tinggi dari pemasukan."
+        } else {
+            background.setColor(resources.getColor(R.color.notifHijau))
+            background.setStroke(1.dpToPx(), resources.getColor(R.color.iconHijau))
+
+            notifCard.background = background
+            iconNotif.setColorFilter(resources.getColor(R.color.iconHijau))
+            txtNotif.setTextColor(resources.getColor(R.color.iconHijau))
+            txtNotif.text = "Pemasukan bulan ini $persen% lebih tinggi dari pengeluaran."
+        }
+    }
+
+
+    private fun loadLatestTransaksi(selectedDate: String? = null) {
+        val allTrans = dbHelper.getAllTransaksi()
+        val latest3 = allTrans.sortedByDescending { it.id }.take(3)
+        transactionAdapter.updateData(latest3)
+    }
+
+    private fun showDatePicker() {
+        val c = Calendar.getInstance()
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, day ->
+                val selected = convertTanggal(day, month, year)
+                loadLatestTransaksi(selected)
+            },
+            c.get(Calendar.YEAR),
+            c.get(Calendar.MONTH),
+            c.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun convertTanggal(day: Int, monthZero: Int, year: Int): String {
+        val bulan = arrayOf("Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des")
+        return "%02d %s %d".format(day, bulan[monthZero], year)
+    }
+
+    private fun formatRupiah(amount: Int): String {
+        return "Rp. " + String.format("%,d", amount).replace(",", ".")
+    }
+
+    private fun Int.dpToPx(): Int {
+        return (this * resources.displayMetrics.density).toInt()
     }
 }

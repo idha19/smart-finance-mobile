@@ -1,172 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_margin="30dp"
-    app:cardBackgroundColor="@color/babyBlue"
-    app:cardElevation="0dp">
+    android:layout_height="match_parent"
+    android:background="@color/BgUt">
 
+    <!-- HEADER (TIDAK DIUBAH) -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="20dp">
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp">
 
-        <!-- Judul -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/arrow" />
+
         <TextView
             android:id="@+id/judulEdit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
             android:text="Edit Transaksi"
             android:textSize="20sp"
-            android:textStyle="bold"
+            android:fontFamily="@font/manrope_bold"
             android:textColor="@color/black"
-            android:layout_marginBottom="16dp" />
+            android:textStyle="bold"/>
 
-        <!-- Nominal -->
-        <TextView
-            android:id="@+id/nominal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nominal"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/abu22"/>
+
+
+    <!-- KONTEN -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingRight="18dp"
+        android:paddingLeft="18dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="12dp">
+            android:orientation="vertical">
+
+            <!-- SWITCH PEMASUKKAN / PENGELUARAN -->
+            <LinearLayout
+                android:id="@+id/segmentedContainer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/input_jenis">
+
+                <!-- CARD Pemasukkan (ACTIVE - KUNING) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardMasuk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/utamaUt"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/btnMasukText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pemasukkan"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/manrope_medium"
+                            android:textColor="@color/black"/>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <!-- SPACER kecil -->
+                <Space
+                    android:layout_width="6dp"
+                    android:layout_height="1dp"/>
+
+
+                <!-- CARD Pengeluaran (INACTIVE - PUTIH) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardKeluar"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/abu22"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/btnKeluarText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pengeluaran"
+                            android:textSize="15sp"
+                            android:fontFamily="@font/manrope_medium"/>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/labelKategori"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Kategori"
+                android:fontFamily="@font/manrope_medium"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/input_box"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
+
+                <EditText
+                    android:id="@+id/inputKategori"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Pilih kategori"
+                    android:textSize="15sp"
+                    android:focusable="true"
+                    android:paddingRight="45dp"
+                    android:fontFamily="@font/manrope_regular"
+                    android:background="@android:color/transparent"/>
+
+                <ImageView
+                    android:id="@+id/btnKategoriDropdown"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/dropdown"
+                    android:padding="5dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </RelativeLayout>
+
+            <!-- FIELD JUMLAH (label di atas, input di bawah) -->
+            <TextView
+                android:id="@+id/labelJumlah"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Jumlah"
+                android:fontFamily="@font/manrope_medium"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/inputJumlah"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Masukkan jumlah"
+                android:background="@drawable/input_box"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:fontFamily="@font/manrope_regular"
+                android:inputType="number"/>
+
+            <TextView
+                android:id="@+id/labelCatatan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Judul"
+                android:fontFamily="@font/manrope_medium"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/inputCatatan"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Judul"
+                android:background="@drawable/input_box"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/manrope_regular"/>
+
+            <TextView
+                android:id="@+id/labelTanggal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Tanggal"
+                android:fontFamily="@font/manrope_medium"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/inputTanggal"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Pilih tanggal"
+                android:background="@drawable/input_box"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:focusable="false"
+                android:clickable="true"
+                android:fontFamily="@font/manrope_regular"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BUTTON SIMPAN (tetap di bawah) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btnSimpan"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/utamaUt"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/btnSimpanText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rp."
+                android:text="Simpan"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:layout_marginEnd="6dp" />
-
-            <EditText
-                android:id="@+id/etNominal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:paddingVertical="12dp"
-                android:hint="Masukkan nominal"
-                android:background="@android:color/transparent"
-                android:inputType="number"
-                android:textColor="@color/black" />
+                android:fontFamily="@font/manrope_bold"/>
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Jenis -->
-        <TextView
-            android:id="@+id/jenis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Jenis Transaksi"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="12dp">
-
-            <CheckBox
-                android:id="@+id/CheckBox1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pemasukkan" />
-
-            <CheckBox
-                android:id="@+id/CheckBox2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pengeluaran"
-                android:layout_marginStart="20dp" />
-        </LinearLayout>
-
-        <!-- Kategori -->
-        <TextView
-            android:id="@+id/kategori"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kategori"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <Spinner
-            android:id="@+id/spinnerKategori"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Catatan -->
-        <TextView
-            android:id="@+id/catatan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Catatan"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etCatatan"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:minHeight="48dp"
-            android:padding="12dp"
-            android:gravity="top"
-            android:hint="Tambahkan catatan transaksi"
-            android:textColor="@color/black"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Tanggal -->
-        <TextView
-            android:id="@+id/tanggal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tanggal"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
-
-        <EditText
-            android:id="@+id/etTanggal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:padding="12dp"
-            android:hint="Pilih tanggal"
-            android:textColor="@color/black"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Tombol Simpan -->
-        <Button
-            android:id="@+id/btnSimpan"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:backgroundTint="@color/pink"
-            android:text="Simpan Perubahan"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp" />
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

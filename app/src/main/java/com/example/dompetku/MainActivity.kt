@@ -1,121 +1,174 @@
 package com.example.dompetku
 
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.dompetku.Fragment.Dashboard
-import com.example.dompetku.Fragment.New
-import com.example.dompetku.Fragment.Statistik
-import com.example.dompetku.Fragment.Transaksi
+import com.example.dompetku.Fragment.*
 import com.example.dompetku.Model.Transaction
+import com.example.dompetku.Utils.ThemePref
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), New.NewFragmentListener {
 
     private lateinit var btnHome: LinearLayout
-    private lateinit var btnAdd: LinearLayout
     private lateinit var btnCatatan: LinearLayout
     private lateinit var btnStatistik: LinearLayout
+    private lateinit var btnProfil: LinearLayout
 
     private lateinit var imgHome: ImageView
-    private lateinit var imgAdd: ImageView
     private lateinit var imgCatatan: ImageView
     private lateinit var imgStatistik: ImageView
+    private lateinit var imgProfil: ImageView
 
     private lateinit var txtHome: TextView
-    private lateinit var txtAdd: TextView
     private lateinit var txtCatatan: TextView
     private lateinit var txtStatistik: TextView
+    private lateinit var txtProfil: TextView
+
+    private lateinit var fab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val themePref = ThemePref(this)
+        AppCompatDelegate.setDefaultNightMode(
+            if (themePref.isDarkMode()) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inisialisasi tombol bottom menu
+        supportFragmentManager.registerFragmentLifecycleCallbacks(
+            object : androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentResumed(fm: androidx.fragment.app.FragmentManager, fragment: Fragment) {
+                    when (fragment) {
+                        is Dashboard -> setActiveButton(btnHome)
+                        is Statistik -> setActiveButton(btnStatistik)
+                        is Transaksi -> setActiveButton(btnCatatan)
+                        is Profil -> setActiveButton(btnProfil)
+                    }
+                }
+            }, true
+        )
+
+        // INIT BOTTOM MENU
         btnHome = findViewById(R.id.btn_home)
-        btnAdd = findViewById(R.id.btn_add)
-        btnCatatan = findViewById(R.id.btn_catatan)
+        btnCatatan = findViewById(R.id.btn_notes)
         btnStatistik = findViewById(R.id.btn_statistik)
+        btnProfil = findViewById(R.id.btn_profil)
 
-        // Inisialisasi icon dan text
+        // INIT ICON
         imgHome = findViewById(R.id.imageViewHome)
-        imgAdd = findViewById(R.id.imageViewAdd)
-        imgCatatan = findViewById(R.id.imageViewCatatan)
+        imgCatatan = findViewById(R.id.imageViewNotes)
         imgStatistik = findViewById(R.id.imageViewStatistik)
+        imgProfil = findViewById(R.id.imageViewProfil)
 
+        // INIT TEXT
         txtHome = findViewById(R.id.textViewHome)
-        txtAdd = findViewById(R.id.textViewAdd)
-        txtCatatan = findViewById(R.id.textViewCatatan)
+        txtCatatan = findViewById(R.id.textViewNotes)
         txtStatistik = findViewById(R.id.textViewStatistik)
+        txtProfil = findViewById(R.id.textViewProfil)
 
-        // Load default fragment (Dashboard)
+        // INIT FAB
+        fab = findViewById(R.id.fab)
+
+        // DEFAULT: DASHBOARD
         replaceFragment(Dashboard())
         setActiveButton(btnHome)
 
-        // Set click listener bottom menu
+        // MENU CLICK LISTENER
         btnHome.setOnClickListener {
-            replaceFragment(Dashboard())
+            replaceFragment(Dashboard(), false)
             setActiveButton(btnHome)
         }
 
         btnStatistik.setOnClickListener {
-            replaceFragment(Statistik())
+            replaceFragment(Statistik(), true)
             setActiveButton(btnStatistik)
         }
 
-        btnAdd.setOnClickListener {
-            replaceFragment(New())
-            setActiveButton(btnAdd)
-        }
-
         btnCatatan.setOnClickListener {
-            replaceFragment(Transaksi())
+            replaceFragment(Transaksi(), true)
             setActiveButton(btnCatatan)
         }
+
+        btnProfil.setOnClickListener {
+            replaceFragment(Profil(), true)
+            setActiveButton(btnProfil)
+        }
+
+        // FAB → Halaman tambah transaksi
+        fab.setOnClickListener {
+            replaceFragment(New(), true)
+            fab.hide() // highlight menu Laporan
+        }
     }
 
-    // Fungsi untuk mengganti fragment
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
+    // -----------------------------------------
+    // REPLACE FRAGMENT
+    // -----------------------------------------
+    private fun replaceFragment(fragment: Fragment, addToBackstack: Boolean = false) {
+        val transaction = supportFragmentManager.beginTransaction()
             .replace(R.id.container, fragment)
-            .commit()
+
+        if(addToBackstack) {
+            transaction.addToBackStack(null)
+        }
+
+        transaction.commit()
     }
 
-    // Fungsi untuk highlight tombol aktif
+    // -----------------------------------------
+    // SET ACTIVE MENU & FAB VISIBILITY
+    // -----------------------------------------
     private fun setActiveButton(activeButton: LinearLayout) {
-        val buttons = listOf(btnHome, btnStatistik, btnAdd, btnCatatan)
+
+        val buttons = listOf(btnHome, btnStatistik, btnCatatan, btnProfil)
+        val defaultColor = ContextCompat.getColor(this, R.color.textMenu)
+        val activeColor = ContextCompat.getColor(this, R.color.utamaUt)
+
+        // TAMPILKAN FAB HANYA DI HOME
+        if (activeButton == btnHome) {
+            fab.show()
+        } else {
+            fab.hide()
+        }
+
         buttons.forEach { btn ->
+
             val img = when (btn) {
                 btnHome -> imgHome
                 btnStatistik -> imgStatistik
-                btnAdd -> imgAdd
-                else -> imgCatatan
+                btnCatatan -> imgCatatan
+                else -> imgProfil
             }
+
             val txt = when (btn) {
                 btnHome -> txtHome
                 btnStatistik -> txtStatistik
-                btnAdd -> txtAdd
-                else -> txtCatatan
+                btnCatatan -> txtCatatan
+                else -> txtProfil
             }
 
             if (btn == activeButton) {
-                img.setColorFilter(Color.parseColor("#FF4081")) // pink highlight
-                txt.setTextColor(Color.parseColor("#FF4081"))
+                img.setColorFilter(activeColor)
+                txt.setTextColor(activeColor)
             } else {
-                img.setColorFilter(Color.parseColor("#7B1FA2")) // ungu default
-                txt.setTextColor(Color.parseColor("#7B1FA2"))
+                img.setColorFilter(defaultColor)
+                txt.setTextColor(defaultColor)
             }
         }
     }
 
-    // Callback dari NewFragment setelah simpan transaksi
+    // -----------------------------------------
+    // CALLBACK SETELAH ADD TRANSAKSI
+    // -----------------------------------------
     override fun onTransactionAdded(transaksi: Transaction) {
-        // Pindah ke Transaksi fragment dan bisa kirim data jika mau
-        val fragment = Transaksi()
-        replaceFragment(fragment)
+        replaceFragment(Transaksi())
         setActiveButton(btnCatatan)
     }
 }

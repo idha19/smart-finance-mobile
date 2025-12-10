@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan Nama Baru"
+        android:textSize="16sp"
+        android:fontFamily="@font/manrope_bold"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/inputNamaBaru"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Nama Pengguna"
+        android:background="@drawable/input_box"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp" />
+
+    <!-- BUTTON SIMPAN DI KANAN -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/btnSimpanNama"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:text="Simpan"
+            android:textSize="16sp"
+            android:fontFamily="@font/manrope_bold"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/utamaUt"/>
+    </LinearLayout>
+
+</LinearLayout>

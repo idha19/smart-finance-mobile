@@ -1,198 +1,185 @@
 package com.example.dompetku.Adapter
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dompetku.Model.Kategori
 import com.example.dompetku.Model.Transaction
 import com.example.dompetku.R
 import com.example.dompetku.Utils.DatabaseHelper
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
-class TransactionAdapter(val context: Context, private var transactions: MutableList<Transaction>) :
-    RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
+class TransactionAdapter(
+    private val context: Context,
+    private var originalList: MutableList<Transaction>,
+    private val onEditClick: (Transaction) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
 
-    private val dbHelper = DatabaseHelper(context)
+    private val db = DatabaseHelper(context)
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvJenis: TextView = view.findViewById(R.id.textJenis)
-        val tvNominal: TextView = view.findViewById(R.id.textNominal)
-        val tvTanggal: TextView = view.findViewById(R.id.textTanggal)
-        val tvCatatan: TextView = view.findViewById(R.id.textCatatan)
-        val iconKategori: ImageView = view.findViewById(R.id.iconKategori)
+    private var groupedList: MutableList<Any> = mutableListOf()
+    private val checkedPositions = mutableSetOf<Int>()
+
+    private val TYPE_HEADER = 0
+    private val TYPE_ITEM = 1
+
+    init {
+        rebuildList()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.transaksi_item, parent, false)
-        return ViewHolder(view)
+    fun getCheckedCount(): Int = checkedPositions.size
+
+    override fun getItemViewType(position: Int): Int {
+        return if (groupedList[position] is String) TYPE_HEADER else TYPE_ITEM
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val t = transactions[position]
-        holder.tvJenis.text = t.jenis
-        holder.tvNominal.text = "Rp ${formatRupiah(t.nominal)}"
-        holder.tvTanggal.text = t.tanggal
-        holder.tvCatatan.text = t.catatan
-
-        val iconRes = when (t.kategori) {
-            "Makanan" -> R.drawable.ic_makanan
-            "Transportasi" -> R.drawable.ic_transportasi
-            "Belanja" -> R.drawable.ic_belanja
-            "Hiburan" -> R.drawable.ic_hiburan
-            "Tagihan" -> R.drawable.ic_tagihan
-            "Gaji" -> R.drawable.ic_gaji
-            "Lainnya" -> R.drawable.ic_lainnya
-            else -> R.drawable.ic_home // fallback jika kategori tidak cocok
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_HEADER) {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.header_tanggal, parent, false)
+            HeaderHolder(v)
+        } else {
+            val v = LayoutInflater.from(parent.context).inflate(R.layout.transaksi_item, parent, false)
+            ItemHolder(v)
         }
-        holder.iconKategori.setImageResource(iconRes)
     }
 
+    override fun getItemCount(): Int = groupedList.size
 
-    override fun getItemCount(): Int = transactions.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = groupedList[position]
 
-    private fun formatRupiah(nominal: Int): String {
-        return String.format("%,d", nominal).replace(",", ".")
+        if (holder is HeaderHolder) holder.bind(item as String)
+        else if (holder is ItemHolder) holder.bind(item as Transaction, position)
     }
 
-    // Fungsi untuk menambahkan transaksi baru
-    fun addTransaction(transaction: Transaction) {
-        transactions.add(0, transaction) // tambah di awal list
-        notifyItemInserted(0)
+    // ========================= HEADER HOLDER =========================
+    inner class HeaderHolder(v: View) : RecyclerView.ViewHolder(v) {
+        private val tvHeader: TextView = v.findViewById(R.id.textTanggalHeader)
+        fun bind(text: String) { tvHeader.text = text }
     }
 
-    // Fungsi untuk update seluruh list (opsional)
-    fun updateList(newList: List<Transaction>) {
-        transactions.clear()
-        transactions.addAll(newList)
+    // ========================= ITEM HOLDER =========================
+    inner class ItemHolder(v: View) : RecyclerView.ViewHolder(v) {
+
+        private val judul: TextView = v.findViewById(R.id.textJudul)
+        private val kategori: TextView = v.findViewById(R.id.textKategori)
+        private val nominal: TextView = v.findViewById(R.id.textNominal)
+        private val jenis: TextView = v.findViewById(R.id.textJenis)
+        private val check: CheckBox = v.findViewById(R.id.checkBoxKategori)
+        private val edit: ImageView = v.findViewById(R.id.btnEditKategori)
+
+        fun bind(t: Transaction, realPos: Int) {
+
+            judul.text = t.catatan
+            jenis.text = t.jenis
+
+            // ======== Atur warna & prefix nominal berdasarkan jenis ========
+            val prefix = if (t.jenis.equals("Pemasukkan", ignoreCase = true)) {
+                nominal.setTextColor(context.getColor(R.color.masuk))
+                "+Rp "
+            } else {
+                nominal.setTextColor(context.getColor(R.color.keluar))
+                "-Rp "
+            }
+
+            nominal.text = prefix + formatRupiah(t.nominal).replace("Rp ", "")
+
+            // ===============================================================
+
+            kategori.text =
+                db.getAllKategori().find { it.idKategori == t.idKategori }?.nama ?: "-"
+
+            check.setOnCheckedChangeListener(null)
+            check.isChecked = checkedPositions.contains(realPos)
+
+            check.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) checkedPositions.add(realPos)
+                else checkedPositions.remove(realPos)
+            }
+
+            edit.setOnClickListener { onEditClick(t) }
+        }
+
+    }
+
+    // ========================= GROUPING DATE =========================
+    private fun rebuildList() {
+        groupedList.clear()
+
+        val df = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+        val today = Calendar.getInstance()
+
+        val map = originalList.groupBy { it.tanggal }
+        val sortedDates = map.keys.sortedByDescending { df.parse(it) }
+
+        for (tgl in sortedDates) {
+            groupedList.add(getHeaderLabel(today, df.parse(tgl)!!))
+            groupedList.addAll(map[tgl]!!)
+        }
+    }
+
+    private fun getHeaderLabel(today: Calendar, date: Date): String {
+        val cal = Calendar.getInstance().apply { time = date }
+
+        val df = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+        val dayName = SimpleDateFormat("EEEE", Locale("id", "ID")).format(date)
+
+        return when {
+            isSameDay(today, cal) -> "Hari ini, ${df.format(date)}"
+            isYesterday(today, cal) -> "Kemarin, ${df.format(date)}"
+            else -> "$dayName, ${df.format(date)}"
+        }
+    }
+
+    private fun isSameDay(c1: Calendar, c2: Calendar): Boolean =
+        c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+                c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)
+
+    private fun isYesterday(today: Calendar, other: Calendar): Boolean {
+        val cal = today.clone() as Calendar
+        cal.add(Calendar.DAY_OF_YEAR, -1)
+        return isSameDay(cal, other)
+    }
+
+    private fun formatRupiah(n: Int) =
+        "Rp " + String.format("%,d", n).replace(",", ".")
+
+    // ========================= DELETE CHECKED FIXED =========================
+    fun deleteChecked() {
+        val itemsToRemove = checkedPositions.map { groupedList[it] }
+            .filterIsInstance<Transaction>()
+
+        itemsToRemove.forEach { trx ->
+            db.deleteTransaksi(trx.id)
+            originalList.remove(trx)
+        }
+
+        checkedPositions.clear()
+        rebuildList()
         notifyDataSetChanged()
     }
 
-    fun deleteItem(position: Int) {
-        val transaksi = transactions[position]
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Hapus Transaksi")
-        builder.setMessage("Yakin ingin menghapus transaksi ini?")
-        builder.setPositiveButton("Ya") { _, _ ->
-            dbHelper.deleteTransaksi(transaksi.id)
-            transactions.removeAt(position)
-            notifyItemRemoved(position)
-        }
-        builder.setNegativeButton("Batal") { dialog, _ ->
-            dialog.dismiss()
-            notifyItemChanged(position)
-        }
-        builder.show()
-    }
-
-    fun editItem(position: Int) {
-        val transaksi = transactions[position]
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.fragment_edit, null)
-
-        val etNominal = dialogView.findViewById<EditText>(R.id.etNominal)
-        val checkMasuk = dialogView.findViewById<CheckBox>(R.id.CheckBox1)
-        val checkKeluar = dialogView.findViewById<CheckBox>(R.id.CheckBox2)
-        val spinnerKategori = dialogView.findViewById<Spinner>(R.id.spinnerKategori)
-        val etCatatan = dialogView.findViewById<EditText>(R.id.etCatatan)
-        val etTanggal = dialogView.findViewById<EditText>(R.id.etTanggal)
-        val btnSimpan = dialogView.findViewById<Button>(R.id.btnSimpan)
-
-        // set nilai awal
-        etNominal.setText(transaksi.nominal.toString())
-        etCatatan.setText(transaksi.catatan)
-        etTanggal.setText(transaksi.tanggal)
-        checkMasuk.isChecked = transaksi.jenis == "Pemasukkan"
-        checkKeluar.isChecked = transaksi.jenis == "Pengeluaran"
-
-        // setup Spinner
-        val kategoriList = listOf("Makanan", "Transportasi", "Belanja", "Hiburan", "Tagihan", "Gaji", "Lainnya")
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, kategoriList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerKategori.adapter = adapter
-        val selectedIndex = kategoriList.indexOf(transaksi.kategori).takeIf { it >= 0 } ?: 0
-        spinnerKategori.setSelection(selectedIndex)
-
-        // TextWatcher untuk nominal
-        var current = ""
-        etNominal.addTextChangedListener(object : android.text.TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: android.text.Editable?) {
-                if (s.toString() != current) {
-                    etNominal.removeTextChangedListener(this)
-                    val clean = s.toString().replace(".", "")
-                    if (clean.isNotEmpty()) {
-                        try {
-                            val value = clean.toLong()
-                            val formatted = String.format("%,d", value).replace(",", ".")
-                            current = formatted
-                            etNominal.setText(formatted)
-                            etNominal.setSelection(formatted.length)
-                        } catch (_: Exception) {}
-                    }
-                    etNominal.addTextChangedListener(this)
+    // ========================= SEARCH =========================
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(s: CharSequence?): FilterResults {
+                val filtered = if (s.isNullOrBlank()) originalList
+                else originalList.filter {
+                    it.catatan.lowercase().contains(s.toString().lowercase()) ||
+                            it.jenis.lowercase().contains(s.toString().lowercase()) ||
+                            it.tanggal.lowercase().contains(s.toString().lowercase())
                 }
-            }
-        })
 
-        // Checkbox eksklusif
-        checkMasuk.setOnCheckedChangeListener { _, isChecked -> if (isChecked) checkKeluar.isChecked = false }
-        checkKeluar.setOnCheckedChangeListener { _, isChecked -> if (isChecked) checkMasuk.isChecked = false }
-
-        // DatePicker
-        etTanggal.isFocusable = false
-        etTanggal.setOnClickListener {
-            val calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-            try { calendar.time = dateFormat.parse(etTanggal.text.toString()) ?: calendar.time } catch (_: Exception) {}
-            DatePickerDialog(context,
-                { _, y, m, d -> calendar.set(y, m, d); etTanggal.setText(dateFormat.format(calendar.time)) },
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-
-        val dialog = AlertDialog.Builder(context).setView(dialogView).create()
-
-        btnSimpan.setOnClickListener {
-            val nominalStr = etNominal.text.toString().replace(".", "").trim()
-            val catatan = etCatatan.text.toString().trim()
-            val kategori = spinnerKategori.selectedItem.toString()
-            val jenis = when {
-                checkMasuk.isChecked -> "Pemasukkan"
-                checkKeluar.isChecked -> "Pengeluaran"
-                else -> { Toast.makeText(context, "Pilih jenis transaksi!", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
+                return FilterResults().apply { values = filtered }
             }
 
-            if (nominalStr.isEmpty()) { Toast.makeText(context, "Masukkan nominal!", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-            if (jenis == "Pemasukkan" && kategori !in listOf("Gaji", "Lainnya")) { Toast.makeText(context, "Kategori tidak valid untuk pemasukkan!", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-            if (jenis == "Pengeluaran" && kategori == "Gaji") { Toast.makeText(context, "Kategori tidak valid untuk pengeluaran!", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
-
-            transaksi.nominal = nominalStr.toInt()
-            transaksi.jenis = jenis
-            transaksi.kategori = kategori
-            transaksi.catatan = catatan
-            transaksi.tanggal = etTanggal.text.toString()
-
-            dbHelper.updateTransaksi(transaksi)
-            transactions[position] = transaksi
-            notifyItemChanged(position)
-            dialog.dismiss()
+            override fun publishResults(s: CharSequence?, results: FilterResults?) {
+                originalList = (results?.values as List<Transaction>).toMutableList()
+                rebuildList()
+                notifyDataSetChanged()
+            }
         }
-
-        dialog.show()
     }
 }

@@ -1,117 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA">
+    android:background="@color/BgUt">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="16dp">
 
-        <!-- Judul -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/arrow"/>
+
         <TextView
-            android:id="@+id/tvJudulStatistik"
-            android:layout_width="wrap_content"
+            android:id="@+id/titleStatistik"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Statistik Pengeluaran"
-            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Statistik"
             android:textSize="20sp"
-            android:textColor="@color/text"
-            android:layout_marginBottom="8dp" />
+            android:fontFamily="@font/manrope_bold"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
-        <!-- Input Tanggal -->
-        <EditText
-            android:id="@+id/etTanggalStatistik"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Pilih tanggal"
-            android:focusable="false"
-            android:clickable="true"
-            android:padding="12dp"
-            android:textColor="@color/text"
-            android:layout_marginBottom="16dp" />
+        <!-- RIGHT (kosong tetapi diperlukan supaya title tetap center) -->
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/abu22"/>
 
-        <!-- Tombol Filter Periode -->
-        <HorizontalScrollView
-            android:id="@+id/scrollFilter"
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginBottom="20dp">
+            android:layout_height="wrap_content">
+
+            <!-- ===================== TANGGAL + DROPDOWN ===================== -->
+            <!-- ===================== TANGGAL + DROPDOWN (VERSI CARD TERPISAH) ===================== -->
 
             <LinearLayout
-                android:id="@+id/layoutFilter"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
+                android:layout_marginBottom="18dp"
+                android:layout_marginTop="10dp">
 
-                <Button
-                    android:id="@+id/btnHari"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hari"
-                    android:textColor="#9C27B0"
-                    android:backgroundTint="#9C27B0"
-                    android:layout_marginEnd="8dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp" />
+                <!-- TANGGAL -->
+                <LinearLayout
+                    android:id="@+id/layoutTanggal"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/input_box"
+                    android:gravity="center_vertical"
+                    android:paddingStart="12dp">
 
-                <Button
-                    android:id="@+id/btnMinggu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Minggu"
-                    android:textColor="#9C27B0"
-                    android:backgroundTint="#E1BEE7"
-                    android:layout_marginEnd="8dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp" />
+                    <TextView
+                        android:id="@+id/tvTanggal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sab, 22 Nov 2025"
+                        android:textColor="?attr/colorOnPrimary"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope_medium"/>
+                </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnBulan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bulan"
-                    android:textColor="#9C27B0"
-                    android:backgroundTint="#E1BEE7"
-                    android:layout_marginEnd="8dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp" />
 
-                <Button
-                    android:id="@+id/btnTahun"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tahun"
-                    android:textColor="#9C27B0"
-                    android:backgroundTint="#E1BEE7"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="6dp" />
+                <!-- DROPDOWN -->
+                <LinearLayout
+                    android:id="@+id/layoutPeriode"
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/input_box"
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerPeriode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent" />
+                </LinearLayout>
             </LinearLayout>
-        </HorizontalScrollView>
 
-        <!-- Judul PieChart -->
-        <TextView
-            android:id="@+id/tvJudulPie"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Persentase Pengeluaran per Kategori"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/text"
-            android:layout_marginBottom="8dp" />
 
-        <!-- PieChart -->
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pieChartKategori"
-            android:layout_width="match_parent"
-            android:layout_height="330dp"
-            android:layout_marginBottom="24dp" />
+            <!-- ===================== DONUT CHART ===================== -->
+            <LinearLayout
+                android:id="@+id/cardPieChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:padding="12dp"
+                android:orientation="vertical"
+                android:background="@drawable/input_box">
 
-    </LinearLayout>
-</ScrollView>
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tvStatusKeuangan"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Status Keuangan"-->
+<!--                    android:textSize="12dp"-->
+<!--                    android:fontFamily="@font/manrope_medium"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:padding="12dp"-->
+<!--                    android:gravity="center"/>-->
+            </LinearLayout>
+
+
+            <!-- ===================== CARD KATEGORI BESAR ===================== -->
+            <LinearLayout
+                android:id="@+id/cardKategoriBesar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:background="@drawable/input_box"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="18dp">
+
+                <!-- ===================== HEADER: Kategori + Dropdown ===================== -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <!-- Text Kategori -->
+                    <TextView
+                        android:id="@+id/tvKategori"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Kategori"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/manrope_bold"
+                        android:textColor="?attr/colorOnPrimary" />
+
+                    <!-- Dropdown (sama seperti dropdown Periode) -->
+                    <LinearLayout
+                        android:id="@+id/layoutDropdownKategori"
+                        android:layout_width="110dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/input_box"
+                        android:gravity="center_vertical"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp">
+
+                        <Spinner
+                            android:id="@+id/spinnerUrutan"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/itemKategoriTemplate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp">
+
+                    <!-- FIXED BAR WIDTH -->
+                    <LinearLayout
+                        android:id="@+id/containerBar"
+                        android:layout_width="220dp"
+                        android:layout_height="7dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true">
+
+                        <ProgressBar
+                            android:id="@+id/bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="7dp"
+                            android:max="100"
+                            android:progress="85"
+                            android:progressTint="#FFD700"
+                            android:backgroundTint="#E6E6E6"
+                            style="?android:attr/progressBarStyleHorizontal" />
+                    </LinearLayout>
+
+                    <!-- NOMINAL RATA KANAN -->
+                    <TextView
+                        android:id="@+id/nominal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="+ 5.000.000.000"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/manrope_medium"
+                        android:textColor="?attr/colorOnPrimary"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp">
+
+                    <!-- FIXED BAR WIDTH -->
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

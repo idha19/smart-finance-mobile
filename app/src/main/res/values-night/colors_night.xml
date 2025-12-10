@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
+    <color name="text">#182354</color>
+    <color name="icon">#B3D6FB</color>
+    <!--    baru kuning ut-->
+    <color name="BgUt">#1A1A1A</color>
+    <color name="abu22">#243447</color>
+    <color name="utamaUt">#FFD500</color>
+    <color name="keduaUt">#E3BF0D</color>
+    <color name="box">#3C52E3</color>
+    <color name="keluar">#CF0D10</color>
+    <color name="masuk">#189234</color>
+    <color name="bgMasuk">#2E5336</color>
+    <color name="bgKeluar">#602D2E</color>
+    <color name="textMenu">#ABABAB</color>
+    <!--    notif sisa keuangan-->
+    <color name="notifKuning">#FFFBE5</color>
+    <color name="iconKuning">#C58E1A</color>
+    <color name="notifHijau">#E8FCEB</color>
+    <color name="iconHijau">#27AE60</color>
+    <color name="notifMerah">#FDE8E8</color>
+    <color name="iconMerah">#D32F2F</color>
+    <!--    statistik input-boc.xml-->
+    <color name="strokeBox">#4F4D4D</color>
+    <color name="jenis">#082853</color>
+</resources>
