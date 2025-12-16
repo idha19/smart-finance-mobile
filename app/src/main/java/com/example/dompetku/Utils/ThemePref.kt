@@ -9,11 +9,9 @@ class ThemePref(context: Context) {
     fun saveDarkMode(state: Boolean) {
         pref.edit().putBoolean("dark_mode", state).apply()
     }
-
     fun isDarkMode(): Boolean {
         return pref.getBoolean("dark_mode", false)
     }
-
     fun clear() {
         pref.edit().clear().apply()
     }

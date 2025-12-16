@@ -14,7 +14,7 @@ class DatabaseHelper(context: Context) :
         private const val DATABASE_NAME = "dompetKu_db"
         private const val DATABASE_VERSION = 1
 
-        // ----------------- TABLE KATEGORI -----------------
+        // ----------------- TABLE KATEGORI
         private const val TABLE_KATEGORI = "kategori"
         private const val ID_KATEGORI = "idKategori"
         private const val NAMA = "nama"
