@@ -57,6 +57,10 @@ class Profil : Fragment() {
         themePref = ThemePref(requireContext())
 
         imgProfile = view.findViewById(R.id.imgProfile)
+        imgProfile.setOnClickListener{
+            showImagePreview()
+        }
+
         profileName = view.findViewById(R.id.profileName)
         switchDark = view.findViewById(R.id.switchDark)
         val textDarkMode = view.findViewById<TextView>(R.id.darkMood)
@@ -70,7 +74,7 @@ class Profil : Fragment() {
             try {
                 imgProfile.setImageURI(Uri.parse(it))
             } catch (_: Exception) {
-                imgProfile.setImageResource(R.drawable.logo)
+                imgProfile.setImageResource(R.drawable.account)
             }
         }
 
@@ -116,6 +120,25 @@ class Profil : Fragment() {
 
         return view
     }
+
+    private fun showImagePreview() {
+        val dialog = android.app.Dialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.photo_zoom, null)
+        dialog.setContentView(view)
+
+        val imgPreview =
+            view.findViewById<com.github.chrisbanes.photoview.PhotoView>(R.id.imgPreview)
+        val btnClose = view.findViewById<ImageView>(R.id.btnClose)
+
+        imgPreview.setImageDrawable(imgProfile.drawable)
+
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+    }
+
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -165,7 +188,7 @@ class Profil : Fragment() {
         themePref.clear()
 
         profileName.text = "Nama Pengguna"
-        imgProfile.setImageResource(R.drawable.logo)
+        imgProfile.setImageResource(R.drawable.account)
 
         activity?.recreate()
     }

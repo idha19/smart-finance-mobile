@@ -5,7 +5,7 @@ import java.io.Serializable
 class Transaction (
     var id: Int = 0,
     var jenis: String,
-    var nominal: Int,
+    var nominal: Long,
     var tanggal: String,
     var catatan: String,
     var idKategori: Int

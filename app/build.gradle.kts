@@ -49,6 +49,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.google.android.material:material:1.12.0")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

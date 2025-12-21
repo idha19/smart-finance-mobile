@@ -84,7 +84,11 @@ class TransactionAdapter(
                 "-Rp "
             }
 
-            nominal.text = prefix + formatRupiah(t.nominal).replace("Rp ", "")
+            fun formatRupiah(nominal: Long): String {
+                return String.format("%,d", nominal).replace(",", ".")
+            }
+
+            nominal.text = "$prefix${formatRupiah(t.nominal)}"
 
             // ===============================================================
 

@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.dompetku.Model.Transaction
 import com.example.dompetku.R
@@ -22,7 +21,6 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.color.MaterialColors
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -244,15 +242,15 @@ class Statistik : Fragment() {
 
         val kategoriMap = dbHelper.getAllKategori().associateBy { it.idKategori }
 
-        var totalPemasukan = 0
-        var totalPengeluaran = 0
-        var totalSemua = 0
+        var totalPemasukan = 0L
+        var totalPengeluaran = 0L
+        var totalSemua = 0L
 
         // Gabungkan income + expense per kategori
-        val mapKategori = mutableMapOf<String, Int>()
+        val mapKategori = mutableMapOf<String, Long>()
         transaksiList.forEach { t ->
             val namaKategori = kategoriMap[t.idKategori]?.nama ?: "Lainnya"
-            mapKategori[namaKategori] = (mapKategori[namaKategori] ?: 0) + t.nominal
+            mapKategori[namaKategori] = ((mapKategori[namaKategori] ?: 0) + t.nominal)
             totalSemua += t.nominal
 
             if (t.jenis.equals("Pemasukkan", true)) {
@@ -313,8 +311,8 @@ class Statistik : Fragment() {
         val kategoriMap = dbHelper.getAllKategori().associateBy { it.idKategori }
 
         // Hitung total per kategori dan total nominal
-        val mapKategori = mutableMapOf<String, Int>()
-        var totalNominal = 0
+        val mapKategori = mutableMapOf<String, Long>()
+        var totalNominal = 0L
         transaksiList.forEach { t ->
             val namaKategori = kategoriMap[t.idKategori]?.nama ?: "Lainnya"
             mapKategori[namaKategori] = (mapKategori[namaKategori] ?: 0) + t.nominal
@@ -397,7 +395,7 @@ class Statistik : Fragment() {
 
             val progressBar = ProgressBar(requireContext(), null, android.R.attr.progressBarStyleHorizontal).apply {
                 max = 100
-                progress = persen
+                progress = persen.toInt()
                 progressTintList = ColorStateList.valueOf(Color.parseColor("#FFD700")) // atau #BBE8C1 sesuai selera
                 backgroundTintList = ColorStateList.valueOf(Color.parseColor("#EEEEEE"))
                 layoutParams = LinearLayout.LayoutParams(
@@ -435,7 +433,7 @@ class Statistik : Fragment() {
     }
 
     // ===================== Helper Format Rupiah =====================
-    private fun formatRupiah(nominal: Int): String {
+    private fun formatRupiah(nominal: Long): String {
         return String.format("%,d", nominal).replace(",", ".")
     }
 

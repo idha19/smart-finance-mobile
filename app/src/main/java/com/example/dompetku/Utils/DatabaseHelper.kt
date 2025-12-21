@@ -11,7 +11,7 @@ class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "dompetKu_db"
+        private const val DATABASE_NAME = "dompetKu_aku"
         private const val DATABASE_VERSION = 1
 
         // ----------------- TABLE KATEGORI
@@ -54,8 +54,8 @@ class DatabaseHelper(context: Context) :
 
         // seed default kategori (hanya saat DB pertama kali dibuat)
         val defaults = listOf(
-            "Makanan", "Minuman", "Belanja", "Transportasi", "Hiburan",
-            "Tagihan", "Gaji", "Bonus", "Investasi", "Lainnya"
+            "Gaji", "Spareparts", "Workshop", "Unit Alat Berat", "ATK",
+            "Transportasi", "Proyek", "Internet", "Software", "Lainnya"
         )
         for (nama in defaults) {
             val cv = ContentValues().apply { put(NAMA, nama) }
@@ -133,7 +133,7 @@ class DatabaseHelper(context: Context) :
                     Transaction(
                         id = cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
                         jenis = cursor.getString(cursor.getColumnIndexOrThrow(JENIS)),
-                        nominal = cursor.getInt(cursor.getColumnIndexOrThrow(NOMINAL)),
+                        nominal = cursor.getLong(cursor.getColumnIndexOrThrow(NOMINAL)),
                         tanggal = cursor.getString(cursor.getColumnIndexOrThrow(TANGGAL)),
                         catatan = cursor.getString(cursor.getColumnIndexOrThrow(CATATAN)),
                         idKategori = cursor.getInt(cursor.getColumnIndexOrThrow(FK_KATEGORI))

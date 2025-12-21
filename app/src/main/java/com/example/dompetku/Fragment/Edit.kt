@@ -47,6 +47,7 @@ class Edit : Fragment() {
     private lateinit var inputCatatan: EditText
     private lateinit var inputTanggal: EditText
     private lateinit var btnSimpan: CardView
+    private lateinit var listView: ListView
 
     private var kategoriList = mutableListOf<Kategori>()
     private var selectedKategoriId: Int? = null
@@ -182,29 +183,36 @@ class Edit : Fragment() {
 
         btnSimpan.setOnClickListener { updateTransaksi() }
 
+        // --- Di onCreateView ---
+        initKategoriDropdown() // Panggil ini SATU KALI
+
+// Input kategori klik → dropdown muncul
+        inputKategori.setOnClickListener { showKategoriDropdown() }
+        btnKategoriDropdown.setOnClickListener { showKategoriDropdown() }
+
+// Filter saat mengetik
+        inputKategori.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Pastikan popupWindow sudah diinisialisasi
+                if (popupWindow != null && !popupWindow!!.isShowing) {
+                    popupWindow!!.showAsDropDown(inputKategori)
+                }
+                updateKategoriDropdown(s.toString())
+                selectedKategoriId = null
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         return v
     }
 
-    private fun showKategoriDropdown() {
-        if (popupWindow != null && popupWindow!!.isShowing) return
-
-        val listView = ListView(requireContext())
-        popupWindow?.dismiss()
-        popupWindow = PopupWindow(
-            listView,
-            inputKategori.width,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            false
-        )
-
+    private fun initKategoriDropdown() {
+        listView = ListView(requireContext())
+        popupWindow = PopupWindow(listView, inputKategori.width, ViewGroup.LayoutParams.WRAP_CONTENT, false)
         popupWindow!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         popupWindow!!.isOutsideTouchable = true
-        popupWindow!!.isFocusable = false
-
-        popupWindow!!.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         popupWindow!!.inputMethodMode = PopupWindow.INPUT_METHOD_NEEDED
-
-        updateKategoriDropdown(inputKategori.text.toString())
 
         listView.setOnItemClickListener { _, _, pos, _ ->
             val item = listView.adapter.getItem(pos).toString()
@@ -213,28 +221,40 @@ class Edit : Fragment() {
             popupWindow?.dismiss()
         }
 
-        popupWindow!!.showAsDropDown(inputKategori)
+        // TextWatcher untuk filter
+        inputKategori.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateKategoriDropdown(s.toString())
+                selectedKategoriId = null
+                if (!(popupWindow?.isShowing ?: false)) {
+                    popupWindow!!.width = inputKategori.width
+                    popupWindow!!.showAsDropDown(inputKategori)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Klik EditText atau tombol dropdown → tampilkan popup
+        inputKategori.setOnClickListener { showKategoriDropdown() }
+        btnKategoriDropdown.setOnClickListener { showKategoriDropdown() }
+    }
+
+    private fun showKategoriDropdown() {
+        if (popupWindow != null && !popupWindow!!.isShowing) {
+            popupWindow!!.width = inputKategori.width
+            popupWindow!!.showAsDropDown(inputKategori)
+        }
     }
 
     private fun updateKategoriDropdown(filter: String) {
-        val listView = (popupWindow?.contentView as? ListView) ?: return
-
-        val filtered = kategoriList.filter {
-            it.nama.lowercase().contains(filter.lowercase())
-        }.map { it.nama }
-
+        val filtered = kategoriList.filter { it.nama.contains(filter, ignoreCase = true) }.map { it.nama }
         if (filtered.isEmpty()) {
             popupWindow?.dismiss()
             return
         }
-
-        val adapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_list_item_1, filtered)
-        listView.adapter = adapter
-
-        if (!(popupWindow?.isShowing ?: false)) {
-            popupWindow?.showAsDropDown(inputKategori)
-        }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filtered)
+        (popupWindow?.contentView as? ListView)?.adapter = adapter
     }
 
     private fun updateTransaksi() {
@@ -245,7 +265,7 @@ class Edit : Fragment() {
             return
         }
 
-        val nominal = inputJumlah.text.toString().replace("[Rp .]".toRegex(), "").toIntOrNull()
+        val nominal = inputJumlah.text.toString().replace("[Rp .]".toRegex(), "").toLongOrNull()
         if (nominal == null || nominal <= 0) {
             Toast.makeText(requireContext(), "Nominal tidak valid!", Toast.LENGTH_SHORT).show()
             return
@@ -267,7 +287,7 @@ class Edit : Fragment() {
         }
 
         transaction.jenis = jenisTransaksi
-        transaction.nominal = nominal
+        nominal.also { transaction.nominal = it.toLong() }
         transaction.tanggal = inputTanggal.text.toString()
         transaction.catatan = inputCatatan.text.toString()
         transaction.idKategori = kategoriId!!
@@ -300,7 +320,7 @@ class Edit : Fragment() {
         }
     }
 
-    private fun formatRupiah(n: Int): String {
+    private fun formatRupiah(n: Long): String {
         val formatted = String.format("%,d", n).replace(",", ".")
         return "Rp $formatted"
     }

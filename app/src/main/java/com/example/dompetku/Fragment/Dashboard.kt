@@ -90,19 +90,19 @@ class Dashboard : Fragment() {
         tvProfileName.text = profilePref.getName()
         profilePref.getPhoto()?.let { uri ->
             try { imgProfile.setImageURI(Uri.parse(uri)) }
-            catch (_: Exception) { imgProfile.setImageResource(R.drawable.logo) }
+            catch (_: Exception) { imgProfile.setImageResource(R.drawable.account) }
         }
     }
 
     private fun loadRingkasanSaldo() {
         val allTrans = dbHelper.getAllTransaksi()
 
-        var pemasukan = 0
-        var pengeluaran = 0
+        var pemasukan = 0L
+        var pengeluaran = 0L
 
         allTrans.forEach {
-            if (it.jenis.equals("Pemasukkan", true)) pemasukan += it.nominal
-            if (it.jenis.equals("Pengeluaran", true)) pengeluaran += it.nominal
+            if (it.jenis.equals("Pemasukkan", true)) pemasukan += it.nominal.toLong()
+            if (it.jenis.equals("Pengeluaran", true)) pengeluaran += it.nominal.toLong()
         }
 
         tvTotalSaldo.text = formatRupiah(pemasukan - pengeluaran)
@@ -112,9 +112,9 @@ class Dashboard : Fragment() {
         updateNotif(pemasukan, pengeluaran)
     }
 
-    private fun updateNotif(pemasukan: Int, pengeluaran: Int) {
+    private fun updateNotif(pemasukan: Long, pengeluaran: Long) {
 
-        if (pemasukan == 0 && pengeluaran == 0) {
+        if (pemasukan == 0.toLong() && pengeluaran == 0.toLong()) {
             notifCard.visibility = View.GONE
             return
         }
@@ -162,8 +162,16 @@ class Dashboard : Fragment() {
 
     private fun loadLatestTransaksi(selectedDate: String? = null) {
         val allTrans = dbHelper.getAllTransaksi()
-        val latest3 = allTrans.sortedByDescending { it.id }.take(3)
-        transactionAdapter.updateData(latest3)
+
+        val filtered = if (selectedDate != null) {
+            allTrans.filter { it.tanggal == selectedDate }
+        } else {
+            allTrans
+        }
+
+        transactionAdapter.updateData(
+            filtered.sortedByDescending { it.id }.take(4)
+        )
     }
 
     private fun showDatePicker() {
@@ -185,7 +193,7 @@ class Dashboard : Fragment() {
         return "%02d %s %d".format(day, bulan[monthZero], year)
     }
 
-    private fun formatRupiah(amount: Int): String {
+    private fun formatRupiah(amount: Long): String {
         return "Rp. " + String.format("%,d", amount).replace(",", ".")
     }
 
