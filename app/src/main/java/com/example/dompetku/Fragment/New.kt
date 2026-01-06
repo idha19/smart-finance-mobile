@@ -261,10 +261,18 @@ class New : Fragment() {
             idKategori = kategoriId
         )
 
+//        db.insertTransaksi(tr)
+//        toast("Transaksi berhasil disimpan!")
+//        resetForm()
+//        listener?.onTransactionAdded(tr)
+
+
         db.insertTransaksi(tr)
         toast("Transaksi berhasil disimpan!")
-        resetForm()
-        listener?.onTransactionAdded(tr)
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, Transaksi())
+            .commit()
     }
 
     private fun toast(msg: String) {

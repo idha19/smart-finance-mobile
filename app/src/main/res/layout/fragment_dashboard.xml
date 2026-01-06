@@ -251,6 +251,18 @@
                 android:layout_marginHorizontal="9dp"
                 android:nestedScrollingEnabled="false"/>
 
+            <TextView
+                android:id="@+id/tvEmptyTransaksi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Belum ada laporan terbaru"
+                android:textSize="14sp"
+                android:textColor="?attr/colorOnPrimary"
+                android:gravity="center"
+                android:padding="16dp"
+                android:visibility="gone"
+                android:fontFamily="@font/manrope_medium"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

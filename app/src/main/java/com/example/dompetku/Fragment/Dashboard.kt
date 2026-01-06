@@ -36,6 +36,7 @@ class Dashboard : Fragment() {
     private lateinit var notifCard: CardView
     private lateinit var txtNotif: TextView
     private lateinit var iconNotif: ImageView
+    private lateinit var tvEmptyTransaksi: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,6 +85,7 @@ class Dashboard : Fragment() {
         notifCard = view.findViewById(R.id.notif)
         txtNotif = view.findViewById(R.id.txtNotif)
         iconNotif = view.findViewById(R.id.iconNotif)
+        tvEmptyTransaksi = view.findViewById(R.id.tvEmptyTransaksi)
     }
 
     private fun refreshProfile() {
@@ -159,7 +161,6 @@ class Dashboard : Fragment() {
         }
     }
 
-
     private fun loadLatestTransaksi(selectedDate: String? = null) {
         val allTrans = dbHelper.getAllTransaksi()
 
@@ -169,9 +170,16 @@ class Dashboard : Fragment() {
             allTrans
         }
 
-        transactionAdapter.updateData(
-            filtered.sortedByDescending { it.id }.take(4)
-        )
+        val latest = filtered.sortedByDescending { it.id }.take(4)
+
+        if (latest.isEmpty()) {
+            rvTransaksi.visibility = View.GONE
+            tvEmptyTransaksi.visibility = View.VISIBLE
+        } else {
+            rvTransaksi.visibility = View.VISIBLE
+            tvEmptyTransaksi.visibility = View.GONE
+            transactionAdapter.updateData(latest)
+        }
     }
 
     private fun showDatePicker() {
