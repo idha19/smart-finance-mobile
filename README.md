@@ -41,8 +41,9 @@ Aplikasi Smart Finance Mobile mendukung *Light Mode* dan *Dark Mode*
 untuk meningkatkan kenyamanan pengguna dalam berbagai kondisi pencahayaan.
 
 *Light Mode*  
-![light](designfigma/light.png)
+![UI Light Mode](designfigma/light.png)
 
 *Dark Mode*  
-![dark](designfigma/dark.png)
+![UI Dark Mode](designfigma/dark.png)
+
 
